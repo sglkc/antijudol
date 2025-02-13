@@ -1,6 +1,6 @@
 # Instalasi
 
-1. Download arsip extension terbaru dari [Releases](releases/latest)
+1. Download arsip extension terbaru dari [Releases](https://github.com/sglkc/antijudol/releases)
 2. Buat folder baru, lalu ekstrak arsip di dalamnya
 3. Buka `chrome://extensions`
 
