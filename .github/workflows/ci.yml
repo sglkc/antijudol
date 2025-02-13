@@ -42,10 +42,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_ID=$(gh release view latest --json id -q '.id' || echo "none")
-
-          if [[ "$RELEASE_ID" == "none" ]]; then
-            gh release create latest "$ZIP_PATH" --title "Latest Release" --notes "Automated release" --prerelease --target main
-          else
-            gh release upload latest "$ZIP_PATH" --clobber
-          fi
+          gh release create "release-$(date +%Y%m%d-%H%M%S)" "$ZIP_PATH" \
+            --title "Automated Release $(date +'%Y-%m-%d %H:%M:%S')" \
+            --notes "Automated release by GitHub Actions."
