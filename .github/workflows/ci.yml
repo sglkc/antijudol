@@ -42,7 +42,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_ID=$(gh release view latest --json id -q '.id' || echo "none")
+          set -e
+          RELEASE_EXISTS=$(gh release list --json tagName | jq -r '.[].tagName' | grep -w latest || echo "none")
+
           if [[ "$RELEASE_ID" == "none" ]]; then
             gh release create latest "$ZIP_PATH" --title "Latest Release" --notes "Automated release" --prerelease --target main
           else
