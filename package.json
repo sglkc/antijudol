@@ -1,8 +1,8 @@
 {
-  "name": "wxt-starter",
-  "description": "manifest.json description",
+  "name": "antijudol",
+  "description": "Blokir komentar judi online pada video YouTube",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",

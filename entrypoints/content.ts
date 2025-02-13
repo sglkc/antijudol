@@ -18,8 +18,11 @@ function onNewComment(element: Element) {
 }
 
 export default defineContentScript({
-  matches: ['https://*.youtube.com/watch'],
+  matches: ['https://*.youtube.com/*'],
   async main() {
+    console.log('Injected extension script')
+
+    // tunggu sampai comment section dirender
     await new Promise<void>((resolve, reject) => {
       if (document.querySelector('ytd-item-section-renderer:has(:is(#content, #contents))')) return resolve()
 
