@@ -48,7 +48,7 @@ jobs:
 
           if [[ "$RELEASE_ID" == "none" ]]; then
             gh release create latest "$ZIP_CHROME" "$ZIP_FIREFOX" \
-              --title "Latest Release" --notes "Automated release" --prerelease --target main
+              --title "Latest Release" --notes "Automated release" --prerelease --target master
           else
             gh release upload latest "$ZIP_CHROME" --clobber
             gh release upload latest "$ZIP_FIREFOX" --clobber
