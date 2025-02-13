@@ -1,0 +1,49 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 'latest'
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build extension
+        run: pnpm run build
+
+      - name: Zip extension
+        run: pnpm run zip
+
+      - name: Find ZIP file
+        id: find_zip
+        run: echo "ZIP_PATH=$(find .output -name '*.zip' | head -n 1)" >> $GITHUB_ENV
+
+      - name: Upload release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_ID=$(gh release view latest --json id -q '.id' || echo "none")
+          if [[ "$RELEASE_ID" == "none" ]]; then
+            gh release create latest "$ZIP_PATH" --title "Latest Release" --notes "Automated release" --prerelease --target main
+          else
+            gh release upload latest "$ZIP_PATH" --clobber
