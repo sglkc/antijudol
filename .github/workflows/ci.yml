@@ -49,3 +49,4 @@ jobs:
             gh release create latest "$ZIP_PATH" --title "Latest Release" --notes "Automated release" --prerelease --target main
           else
             gh release upload latest "$ZIP_PATH" --clobber
+          fi
