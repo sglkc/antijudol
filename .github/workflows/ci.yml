@@ -34,9 +34,11 @@ jobs:
       - name: Zip extension
         run: pnpm run zip && pnpm run zip:firefox
 
-      - name: Find ZIP file
-        id: find_zip
-        run: echo "ZIP_PATH=$(find .output -name '*.zip' | head -n 2)" >> $GITHUB_ENV
+      - name: Find ZIP files
+        id: find_zips
+        run: |
+          echo "ZIP_CHROME=$(find .output -name '*chrome*.zip' | head -n 1)" >> $GITHUB_ENV
+          echo "ZIP_FIREFOX=$(find .output -name '*firefox*.zip' | head -n 1)" >> $GITHUB_ENV
 
       - name: Upload release
         env:
