@@ -39,4 +39,13 @@ initModel().then(() => {
   window.tokenize = tokenize
 
   chrome.runtime.sendMessage('model loaded!')
+
+  chrome.runtime.onMessage.addListener((msg, _, res) => {
+    console.log('OFFSCREEN MESSAGE', msg)
+
+    const prediction = model.predict(tokenize(msg))
+
+    // @ts-expect-error
+    res(prediction.dataSync()[0])
+  })
 })
