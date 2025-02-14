@@ -16,14 +16,20 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.280",
-    "typescript": "^5.6.3",
-    "wxt": "^0.19.13"
+    "typescript": "^5.7.3",
+    "wxt": "^0.19.27"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "core-js",
       "dtrace-provider",
       "esbuild",
       "spawn-sync"
     ]
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-backend-wasm": "^3.20.0",
+    "@tensorflow/tfjs-core": "3.20.0",
+    "@tensorflow/tfjs-tflite": "0.0.1-alpha.9"
   }
 }
