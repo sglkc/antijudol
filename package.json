@@ -28,6 +28,8 @@
     ]
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-cpu": "^3.20.0",
     "@tensorflow/tfjs-backend-wasm": "^3.20.0",
     "@tensorflow/tfjs-core": "3.20.0",
     "@tensorflow/tfjs-tflite": "0.0.1-alpha.9"
