@@ -2,8 +2,8 @@ async function onNewComment(element: Element) {
   // jika elemen kosong atau tag name tidak sesuai, skip
   if (!element || element.tagName !== 'YTD-COMMENT-THREAD-RENDERER') return
 
-  const author = element.querySelector('#author-text')
-  const content = element.querySelector('#content-text')
+  const author = element.querySelector<HTMLElement>('#author-text')
+  const content = element.querySelector<HTMLElement>('#content-text')
 
   if (!author || !content) return
 
@@ -15,12 +15,16 @@ async function onNewComment(element: Element) {
   // console.log(content.textContent.trim())
   // console.log('-----------------------------------')
 
-  const prediction = await chrome.runtime.sendMessage<string, string>(comment)
+  const prediction = Number(await chrome.runtime.sendMessage<string, string>(comment))
 
   console.log('PREDICTION', prediction)
 
-  author.textContent += `(Score: ${prediction})`
-  // content.textContent = 'saya dukung kemajuan ICT'
+  author.textContent += `(${prediction})`
+
+  if (prediction > 0.9) {
+    author.style.color = 'red'
+    content.style.color = 'red'
+  }
 }
 
 export default defineContentScript({

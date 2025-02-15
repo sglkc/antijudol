@@ -1,5 +1,7 @@
 import * as tf from '@tensorflow/tfjs'
 
+const MODEL = import.meta.env.MODEL ?? 'balanced'
+
 let model: tf.LayersModel
 let vocab: Record<string, number>
 
@@ -7,22 +9,21 @@ async function initModel() {
   // await tf.setBackend('cpu')
   await tf.ready()
 
-  model = await tf.loadLayersModel(chrome.runtime.getURL('/tf/model.json'))
-  vocab = await (await fetch(chrome.runtime.getURL('/tf/vocab.json'))).json()
+  model = await tf.loadLayersModel(chrome.runtime.getURL(`/${MODEL}/model.json`))
+  vocab = await (await fetch(chrome.runtime.getURL(`/${MODEL}/vocab.json`))).json()
 }
 
 function tokenize(text: string, maxLen = 100) {
-    // Convert text to lowercase and split into words
-    let sequence = text.toLowerCase().split(/\s+/).map(word => vocab[word] || 0);
+  // Convert text to lowercase and split into words
+  const sequence = text.toLowerCase().split(/\s+/).map(word => vocab[word] || 0);
+  const padded = new Array(maxLen).fill(0)
+  const start = Math.max(0, maxLen - sequence.length)
 
-    // Pad or truncate sequence
-    if (sequence.length < maxLen) {
-        sequence = [...sequence, ...Array(maxLen - sequence.length).fill(0)];
-    } else {
-        sequence = sequence.slice(0, maxLen);
-    }
+  for (let i = 0; i < Math.min(sequence.length, maxLen); i++) {
+    padded[start + i] = sequence[i];
+  }
 
-    return tf.tensor2d([sequence], [1, maxLen]); // Convert to Tensor
+  return tf.tensor2d([padded], [1, maxLen]); // Convert to Tensor
 }
 
 initModel().then(() => {
