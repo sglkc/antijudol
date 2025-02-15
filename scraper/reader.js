@@ -5,7 +5,7 @@
 import csv from 'csv-parser'
 import fs from 'node:fs'
 
-const FILES = ['dedi-final.csv']
+const FILES = ['dataset-final.csv']
 
 for (const file of FILES) {
   const results = []
