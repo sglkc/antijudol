@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      csv-parser:
+        specifier: ^3.2.0
+        version: 3.2.0
       csv-writer:
         specifier: ^1.6.0
         version: 1.6.0
@@ -27,6 +30,11 @@ packages:
   acorn@8.14.0:
     resolution: {integrity: sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==}
     engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  csv-parser@3.2.0:
+    resolution: {integrity: sha512-fgKbp+AJbn1h2dcAHKIdKNSSjfp43BZZykXsCjzALjKy80VXQNHPFJ6T9Afwdzoj24aMkq8GwDS7KGcDPpejrA==}
+    engines: {node: '>= 10'}
     hasBin: true
 
   csv-writer@1.6.0:
@@ -52,6 +60,8 @@ snapshots:
   '@fastify/busboy@2.1.1': {}
 
   acorn@8.14.0: {}
+
+  csv-parser@3.2.0: {}
 
   csv-writer@1.6.0: {}
 
