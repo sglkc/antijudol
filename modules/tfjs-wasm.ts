@@ -9,12 +9,12 @@ export default defineWxtModule((wxt) => {
     // [backend, 'tfjs-backend-wasm.wasm'],
     // [backend, 'tfjs-backend-wasm-simd.wasm'],
     // [backend, 'tfjs-backend-wasm-threaded-simd.wasm'],
-    [tflite, 'tflite_web_api_cc.wasm'],
-    [tflite, 'tflite_web_api_cc_simd.wasm'],
-    [tflite, 'tflite_web_api_cc_simd_threaded.wasm'],
-    [tflite, 'tflite_web_api_cc.js'],
-    [tflite, 'tflite_web_api_cc_simd.js'],
-    [tflite, 'tflite_web_api_cc_simd_threaded.js'],
+    // [tflite, 'tflite_web_api_cc.wasm'],
+    // [tflite, 'tflite_web_api_cc_simd.wasm'],
+    // [tflite, 'tflite_web_api_cc_simd_threaded.wasm'],
+    // [tflite, 'tflite_web_api_cc.js'],
+    // [tflite, 'tflite_web_api_cc_simd.js'],
+    // [tflite, 'tflite_web_api_cc_simd_threaded.js'],
   ]
 
   wxt.hook('build:publicAssets', (_, assets) => {
