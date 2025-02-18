@@ -29,16 +29,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build extension
-        run: pnpm run build && pnpm run build:firefox
+        run: pnpm run build
 
       - name: Zip extension
-        run: pnpm run zip && pnpm run zip:firefox
+        run: pnpm run zip
 
       - name: Find ZIP files
         id: find_zips
         run: |
           echo "ZIP_CHROME=$(find .output -name '*chrome*.zip' | head -n 1)" >> $GITHUB_ENV
-          echo "ZIP_FIREFOX=$(find .output -name '*firefox*.zip' | head -n 1)" >> $GITHUB_ENV
 
       - name: Upload release
         env:
@@ -47,9 +46,8 @@ jobs:
           RELEASE_ID=$(gh release view latest --json id -q '.id' || echo "none")
 
           if [[ "$RELEASE_ID" == "none" ]]; then
-            gh release create latest "$ZIP_CHROME" "$ZIP_FIREFOX" \
+            gh release create latest "$ZIP_CHROME" \
               --title "Latest Release" --notes "Automated release" --prerelease --target master
           else
             gh release upload latest "$ZIP_CHROME" --clobber
-            gh release upload latest "$ZIP_FIREFOX" --clobber
           fi
