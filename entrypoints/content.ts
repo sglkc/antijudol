@@ -27,60 +27,63 @@ async function onNewComment(element: Element) {
   }
 }
 
+async function run() {
+  // tunggu sampai comment section dirender
+  await new Promise<void>((resolve, reject) => {
+    if (document.querySelector('ytd-item-section-renderer:has(:is(#content, #contents))')) return resolve()
+
+    const documentObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+          if (!(node instanceof HTMLElement)) return
+          if (!node.matches('ytd-comment-thread-renderer:has(#content, #contents)')) return
+
+          console.log('found observing', node)
+          documentObserver.disconnect()
+          resolve()
+        }
+      }
+    })
+
+    documentObserver.observe(document.body, { childList: true, subtree: true })
+  })
+
+  // ambil element container komentar
+  const commentSection = document.querySelector('ytd-item-section-renderer #contents') as HTMLElement
+  console.log('FOUND!!', commentSection)
+
+  const storage = await chrome.storage.local.get(['enabled'])
+
+  console.log(storage)
+  if (!storage.enabled) {
+    document.querySelector('ytd-comments#comments')?.classList.add('judol-off')
+  }
+
+  // langsung proses komentar yang sudah dirender awal
+  // setiap elemen dari isi comment section diproses oleh fungsi onNewComment
+  Array.from(commentSection.children).forEach(onNewComment)
+
+  // observe mutasi elemen, jika ada perubahan maka panggil callback dibawah
+  const commentSectionObserver = new MutationObserver(([ mutation ]) => {
+    // skip jika tidak ada elemen ditambahkan
+    if (!mutation.addedNodes) return
+
+    // komentar ditambahkan satu-per-satu, ambil elemen pertama dari array
+    const [newComment] = mutation.addedNodes
+
+    // gaskan ke fungsi proses komentar
+    onNewComment(newComment as Element)
+  })
+
+  // observe isi elemen dari commentsection
+  // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
+  commentSectionObserver.observe(commentSection, { childList: true })
+}
+
 export default defineContentScript({
   matches: ['https://*.youtube.com/*'],
-  async main() {
+  main() {
     console.log('Injected extension script')
-
-    // tunggu sampai comment section dirender
-    await new Promise<void>((resolve, reject) => {
-      if (document.querySelector('ytd-item-section-renderer:has(:is(#content, #contents))')) return resolve()
-
-      const documentObserver = new MutationObserver((mutations) => {
-        for (const mutation of mutations) {
-          for (const node of mutation.addedNodes) {
-            if (!(node instanceof HTMLElement)) return
-            if (!node.matches('ytd-comment-thread-renderer:has(#content, #contents)')) return
-
-            console.log('found observing', node)
-            documentObserver.disconnect()
-            resolve()
-          }
-        }
-      })
-
-      documentObserver.observe(document.body, { childList: true, subtree: true })
-    })
-
-    // ambil element container komentar
-    const commentSection = document.querySelector('ytd-item-section-renderer #contents') as HTMLElement
-    console.log('FOUND!!', commentSection)
-
-    const storage = await chrome.storage.local.get(['enabled'])
-
-    console.log(storage)
-    if (!storage.enabled) {
-      document.querySelector('ytd-comments#comments')?.classList.add('judol-off')
-    }
-
-    // langsung proses komentar yang sudah dirender awal
-    // setiap elemen dari isi comment section diproses oleh fungsi onNewComment
-    Array.from(commentSection.children).forEach(onNewComment)
-
-    // observe mutasi elemen, jika ada perubahan maka panggil callback dibawah
-    const commentSectionObserver = new MutationObserver(([ mutation ]) => {
-      // skip jika tidak ada elemen ditambahkan
-      if (!mutation.addedNodes) return
-
-      // komentar ditambahkan satu-per-satu, ambil elemen pertama dari array
-      const [newComment] = mutation.addedNodes
-
-      // gaskan ke fungsi proses komentar
-      onNewComment(newComment as Element)
-    })
-
-    // observe isi elemen dari commentsection
-    // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe
-    commentSectionObserver.observe(commentSection, { childList: true })
+    run()
   },
 });
