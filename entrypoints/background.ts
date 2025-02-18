@@ -14,23 +14,23 @@ export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
   initOffscreen()
 
-  chrome.runtime.onMessage.addListener(async (msg: { enabled: boolean }) => {
-    if (!('enabled' in msg)) return
-
+  chrome.storage.local.onChanged.addListener(async ({ enabled }) => {
     const [tab] = await chrome.tabs.query({
       active: true,
       currentWindow: true,
       windowType: 'normal',
     })
 
-    if (!tab || !tab.id) return
+    if (!tab || !tab.id) return console.error('tab not found')
 
-    chrome.scripting.executeScript({
+    await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: (enabled: boolean) => {
         console.log('toggled:', enabled)
+        document.querySelector('ytd-comments#comments')
+          ?.classList.toggle('judol-off', !enabled)
       },
-      args: [msg.enabled]
+      args: [enabled.newValue]
     })
   })
 });

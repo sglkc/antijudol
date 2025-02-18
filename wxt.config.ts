@@ -4,7 +4,7 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   extensionApi: 'chrome',
   manifest: {
-    permissions: ['offscreen'],
+    permissions: ['offscreen', 'storage'],
     host_permissions: ['https://*.youtube.com/*'],
     externally_connectable: {
       ids: [],

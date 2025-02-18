@@ -1,9 +1,9 @@
 import '~/assets/popup.css'
 
+const storage = await chrome.storage.local.get(['enabled'])
 const checkbox = document.querySelector('[type=checkbox]') as HTMLInputElement
 
-checkbox.checked = Boolean(localStorage.getItem('enabled'))
+checkbox.checked = Boolean(storage?.enabled)
 checkbox.onchange = () => {
-  chrome.runtime.sendMessage({ enabled: checkbox.value })
-  localStorage.setItem('enabled', '1')
+  chrome.storage.local.set({ enabled: checkbox.checked })
 }

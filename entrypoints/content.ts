@@ -21,10 +21,9 @@ async function onNewComment(element: Element) {
 
   console.log('PREDICTION', prediction)
 
-  author.textContent += `(${prediction})`
-
   if (prediction > 0.9) {
-    content.classList.add('judol')
+    author.textContent += `(Kepercayaan: ${(prediction*100).toFixed(2)}%)`
+    element.classList.add('judol')
   }
 }
 
@@ -56,6 +55,13 @@ export default defineContentScript({
     // ambil element container komentar
     const commentSection = document.querySelector('ytd-item-section-renderer #contents') as HTMLElement
     console.log('FOUND!!', commentSection)
+
+    const storage = await chrome.storage.local.get(['enabled'])
+
+    console.log(storage)
+    if (!storage.enabled) {
+      document.querySelector('ytd-comments#comments')?.classList.add('judol-off')
+    }
 
     // langsung proses komentar yang sudah dirender awal
     // setiap elemen dari isi comment section diproses oleh fungsi onNewComment
