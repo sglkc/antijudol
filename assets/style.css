@@ -1,0 +1,8 @@
+:not(.judol-off) .judol {
+  filter: blur(10px);
+}
+
+:not(.judol-off) .judol {
+  transition: filter 0.5s ease;
+  filter: none;
+}

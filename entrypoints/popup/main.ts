@@ -1,18 +1,9 @@
-import './style.css';
-import { setupCounter } from '@/components/counter';
+import '~/assets/popup.css'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://wxt.dev" target="_blank"></a>
-    <a href="https://www.typescriptlang.org/" target="_blank"></a>
-    <h1>WXT + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the WXT and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+const checkbox = document.querySelector('[type=checkbox]') as HTMLInputElement
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);
+checkbox.checked = Boolean(localStorage.getItem('enabled'))
+checkbox.onchange = () => {
+  chrome.runtime.sendMessage({ enabled: checkbox.value })
+  localStorage.setItem('enabled', '1')
+}

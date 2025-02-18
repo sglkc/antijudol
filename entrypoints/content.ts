@@ -1,3 +1,5 @@
+import '~/assets/style.css'
+
 async function onNewComment(element: Element) {
   // jika elemen kosong atau tag name tidak sesuai, skip
   if (!element || element.tagName !== 'YTD-COMMENT-THREAD-RENDERER') return
@@ -22,8 +24,7 @@ async function onNewComment(element: Element) {
   author.textContent += `(${prediction})`
 
   if (prediction > 0.9) {
-    author.style.color = 'red'
-    content.style.color = 'red'
+    content.classList.add('judol')
   }
 }
 
